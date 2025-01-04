@@ -8,7 +8,6 @@ import {
   ChevronRight,
   CircuitBoardIcon,
   ContactRound,
-  Command,
   CreditCard,
   File,
   FileText,
@@ -41,12 +40,29 @@ import {
   CirclePlus,
   TriangleAlert,
   Component,
-  NotebookPen,
+  Gamepad,
+  MailIcon,
+  RotateCcw,
+  Gamepad2,
+  Pause,
+  Play,
+  Trophy,
+  Clock,
+  CircleX,
   LayoutList,
+  NotebookPen,
+  TableOfContents,
 } from 'lucide-react';
 
 export const Icons = {
   dashboard: LayoutDashboardIcon,
+  restart: RotateCcw,
+  startGame: Gamepad2,
+  pause: Pause,
+  start: Play,
+  score: Trophy,
+  losses: CircleX,
+  time: Clock,
   danger: TriangleAlert,
   logo: ({ ...props }) => {
     return (
@@ -57,9 +73,6 @@ export const Icons = {
         viewBox="0 0 24 24"
         fill="none"
         stroke="#00ff00"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
         {...props}
       >
         <path d="M7 10v12" />
@@ -67,13 +80,14 @@ export const Icons = {
       </svg>
     );
   },
+  email: MailIcon,
   login: LogIn,
   component: Component,
   close: X,
+  games: Gamepad,
   profile: User2Icon,
   spinner: Loader2,
   contactRound: ContactRound,
-  command: Command,
   kanban: CircuitBoardIcon,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
@@ -85,12 +99,12 @@ export const Icons = {
   settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,
-  form: NotebookPen,
-  datatable: TableProperties,
-  template: LayoutList,
   add: Plus,
   addCircle: CirclePlus,
   warning: AlertTriangle,
+  form: NotebookPen,
+  datatable: TableProperties,
+  template: LayoutList,
   user: User,
   users: Users,
   languages: Languages,
@@ -100,7 +114,7 @@ export const Icons = {
   calendarPlus: CalendarPlus,
   calendarSearch: CalendarSearch,
   charts: ChartLine,
-  table: TableProperties,
+  table: TableOfContents,
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,
