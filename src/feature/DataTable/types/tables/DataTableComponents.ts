@@ -9,7 +9,7 @@ export interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 
-export type DataTableToolbarActionsProps = React.HTMLAttributes<HTMLDivElement>;
+export type DataTableToolbarActionsProps<TData> = { table: Table<TData> } & React.HTMLAttributes<HTMLDivElement>;
 
 export interface DataTableFacetedFilterProps<TData, TValue, R extends RouteIds<RegisteredRouter['routeTree']>> {
   column?: Column<TData, TValue>;
@@ -20,4 +20,6 @@ export interface DataTableFacetedFilterProps<TData, TValue, R extends RouteIds<R
     icon?: React.ComponentType<{ className?: string }>;
   }[];
   routeId: R;
+  classNameButton?: string;
+  classNamePopover?: string;
 }

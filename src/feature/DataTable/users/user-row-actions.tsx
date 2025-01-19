@@ -6,6 +6,7 @@ import { DialogComponent } from '../components/dialog';
 
 import { UserTable } from './types/User';
 import { DataTableRowActionsProps } from '../types/tables/DataTableComponents';
+
 export function UserButtonAction<TData>({ row }: DataTableRowActionsProps<TData>) {
   const user = UserTable.parse(row.original);
   const router = useRouter();

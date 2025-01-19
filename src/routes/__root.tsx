@@ -20,7 +20,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
   return (
     <SidebarComponent>
-      <div>
+      <div className="max-lg:w-screen px-3">
         <ScrollRestoration getKey={(location) => location.pathname} />
         <Outlet />
       </div>

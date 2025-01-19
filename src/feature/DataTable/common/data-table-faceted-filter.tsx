@@ -28,6 +28,8 @@ export function DataTableFacetedFilter<TData, TValue, R extends RouteIds<Registe
   title,
   options,
   routeId,
+  classNameButton,
+  classNamePopover,
 }: DataTableFacetedFilterProps<TData, TValue, R>) {
   const { filters, setFilters } = useFilters<R>(routeId);
   const facets = column?.getFacetedUniqueValues() as FacetsType;
@@ -89,16 +91,16 @@ export function DataTableFacetedFilter<TData, TValue, R extends RouteIds<Registe
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 border-dashed">
+        <Button variant="outline" size="sm" className={cn('h-8 w-auto min-w-fit border-dashed', classNameButton)}>
           <PlusCircledIcon className="mr-2 h-4 w-4" />
           {title}
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
-              <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
+              <Badge variant="secondary" className="rounded-sm px-1 font-normal 2xl:hidden">
                 {selectedValues.size}
               </Badge>
-              <div className="hidden space-x-1 lg:flex">
+              <div className="hidden space-x-1 2xl:flex">
                 {selectedValues.size > 2 ? (
                   <Badge variant="secondary" className="rounded-sm px-1 font-normal">
                     {selectedValues.size} selecionados
@@ -117,7 +119,7 @@ export function DataTableFacetedFilter<TData, TValue, R extends RouteIds<Registe
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
+      <PopoverContent className={cn('w-[200px] p-0', classNamePopover)} align="start">
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>

@@ -15,7 +15,7 @@ import { roles } from '../constants/labels';
 import { GetDataTableColumnHeaderName } from '../lib/headerName';
 import { dateFormatter } from '../lib/utils';
 
-const userTableRouteId: RouteIds<RegisteredRouter['routeTree']> = '/';
+export const userTableRouteId: RouteIds<RegisteredRouter['routeTree']> = '/';
 
 export const userColumns: ColumnDef<UserTableType>[] = [
   {

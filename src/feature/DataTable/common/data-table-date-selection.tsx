@@ -15,6 +15,7 @@ import { DateLocaleType } from '../types/Date';
 import { Filters } from '../types/tables/FilterExtension';
 
 import { cn } from '../lib/utils';
+import { useIsMobile } from '../hooks/use-mobile';
 
 type DatePickerWithRangeType<R> = React.HTMLAttributes<HTMLDivElement> & {
   routeId: R;
@@ -67,6 +68,7 @@ export function DatePickerWithRange<R extends RouteIds<RegisteredRouter['routeTr
         <PopoverTrigger asChild>
           <Button
             variant={'outline'}
+            size="sm"
             className={cn(
               'w-full border-dashed pl-3 text-left font-normal',
               !selectedDate?.from && !selectedDate?.to && 'text-muted-foreground',
@@ -90,7 +92,7 @@ export function DatePickerWithRange<R extends RouteIds<RegisteredRouter['routeTr
             autoFocus
             customLocale={locale || 'pt-BR'}
             selected={selectedDate}
-            numberOfMonths={2}
+            numberOfMonths={useIsMobile() ? 1 : 2}
             disabled={{ after: new Date() }}
             onSelect={(selected: DateRange) => {
               setFilters({

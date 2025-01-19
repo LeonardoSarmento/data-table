@@ -5,7 +5,7 @@ import Header from '@components/header';
 
 import DataTable from '@/feature/DataTable/common/data-table';
 import { userColumns } from '@/feature/DataTable/users/user-columns';
-import { DataTableToolbar } from '@/feature/DataTable/users/user-table-toolbar';
+import { DataTableToolbarUsers } from '@/feature/DataTable/users/user-table-toolbar';
 import { queryOptionsUserTable } from '@/feature/DataTable/users/queries/useTableUser';
 import { UserFilters } from '@/feature/DataTable/users/types/User';
 
@@ -29,7 +29,7 @@ function UsersComponent() {
   return (
     <>
       <Header title="Usuários" description="Listagem de todos os usuários da plataforma" />
-      <DataTable data={userData} columns={columns} toolbar={DataTableToolbar} routeId={Route.id} />
+      <DataTable data={userData} columns={columns} toolbar={DataTableToolbarUsers} routeId={Route.id} />
     </>
   );
 }

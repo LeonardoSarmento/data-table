@@ -27,7 +27,7 @@ export const DialogComponent = React.forwardRef<HTMLButtonElement, DialogType>(
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button {...props} ref={ref} variant={buttonType === 'rowAction' ? 'outline' : 'destructive'}>
+          <Button {...props} ref={ref} variant={buttonType === 'rowAction' ? 'outline' : 'destructive'} size="sm">
             {buttonType === 'rowAction' ? <DeleteIcon /> : buttonText ? buttonText : 'Deletar'}
           </Button>
         </DialogTrigger>

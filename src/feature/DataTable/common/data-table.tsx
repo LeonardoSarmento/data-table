@@ -37,12 +37,25 @@ type Props<
   columns: ColumnDef<T>[];
   toolbar?: ({ table }: DataTableToolbarProps<T>) => React.JSX.Element;
   routeId: R;
+  header?: boolean;
+  pagination?: boolean;
+  pageselection?: boolean;
+  rowcountselection?: boolean;
 };
 
 export default function DataTable<
   T extends Record<string, string | number | string[] | number[] | Date>,
   R extends RouteIds<RegisteredRouter['routeTree']>,
->({ data, columns, toolbar, routeId }: Props<T, R>) {
+>({
+  data,
+  columns,
+  routeId,
+  toolbar,
+  header = true,
+  pagination = true,
+  pageselection = true,
+  rowcountselection = true,
+}: Props<T, R>) {
   const { filters, setFilters } = useFilters<R>(routeId);
   const { pageIndex, pageSize, sortBy } = filters as Filters<T>;
   const paginationState = {
@@ -82,22 +95,24 @@ export default function DataTable<
   });
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border p-2">
+    <div className="flex flex-col gap-3 rounded-lg border p-2 overflow-scroll">
       {toolbar && toolbar({ table: table })}
       <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
+        {header ? (
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id} colSpan={header.colSpan}>
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+        ) : null}
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -116,7 +131,9 @@ export default function DataTable<
           )}
         </TableBody>
       </Table>
-      <DataTablePagination table={table} />
+      {pagination ? (
+        <DataTablePagination table={table} pageselection={pageselection} rowcountselection={rowcountselection} />
+      ) : null}
     </div>
   );
 }

@@ -1,31 +1,33 @@
 import { useRouter } from '@tanstack/react-router';
 
-import { Button } from '../components/ui/button';
-import { DialogComponent } from '../components/dialog';
-
 import { DataTableToolbarActionsProps } from '../types/tables/DataTableComponents';
 
-import { cn } from './../lib/utils';
+import { ControlToolbar } from '../common/data-table-row-actions';
+import { userTableRouteId } from './user-columns';
 
-export function UserToolbarAction({ className, ...props }: DataTableToolbarActionsProps) {
+export function UserToolbarAction<TData>({ className, ...props }: DataTableToolbarActionsProps<TData>) {
   const router = useRouter();
   return (
-    <div className={cn('mx-2 flex justify-center gap-3', className)} {...props}>
-      <Button onClick={() => router.navigate({ to: '/' })} size="sm" variant="default">
-        Criar
-      </Button>
-      <DialogComponent size="sm" title="Deseja remover os registros de usuários?" />
-      <Button
-        onClick={() =>
-          router.navigate({
-            to: '..',
-          })
-        }
-        variant="outline"
-        size="sm"
-      >
-        Voltar
-      </Button>
-    </div>
+    <ControlToolbar
+      {...props}
+      className={className}
+      routeId={userTableRouteId}
+      fileName="Users"
+      actions={[
+        {
+          label: 'Criar',
+          variant: 'default',
+          onClick: () => router.navigate({ to: '/' }),
+        },
+        {
+          dialogTitle: 'Deseja remover os registros de usuários?',
+        },
+        {
+          label: 'Voltar',
+          variant: 'outline',
+          onClick: () => router.navigate({ to: '/' }),
+        },
+      ]}
+    />
   );
 }

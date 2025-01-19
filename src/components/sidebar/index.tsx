@@ -9,8 +9,8 @@ export function SidebarComponent({ children }: PropsWithChildren) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <header className="flex pt-4 shrink-0 items-center gap-2">
+        <div className="flex flex-1 flex-col gap-4 w-full lg:p-4 pt-0">
+          <header className="flex max-lg:p-4 pt-4 shrink-0 items-center gap-2">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
