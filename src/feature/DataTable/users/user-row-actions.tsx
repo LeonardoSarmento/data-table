@@ -18,6 +18,7 @@ export function UserButtonAction<TData>({ row }: DataTableRowActionsProps<TData>
             to: '/',
           })
         }
+        size='sm'
         variant="outline"
       >
         <EditIcon />

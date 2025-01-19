@@ -69,7 +69,7 @@ export function ControlToolbar<TData, R extends RouteIds<RegisteredRouter['route
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="2xl:hidden">
-          <Button variant="outline" className="h-8 space-x-2 data-[state=open]:bg-muted">
+          <Button size="sm" variant="outline" className="h-8 space-x-2 data-[state=open]:bg-muted">
             <MoreHorizontal className="h-4 w-4" />
             <span>{menuLabel}</span>
           </Button>
