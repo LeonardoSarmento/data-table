@@ -9,7 +9,7 @@ export type PaginatedData<T> = {
 export const selectionSchema = z.enum(['SELECTED', 'NOT_SELECTED']);
 export type SelectionType = z.infer<typeof selectionSchema>;
 
-export const selectedIds = z.number().array().optional();
+export const selectedIds = z.union([z.number(), z.string()]).array().optional();
 export type SelectedIdsType = z.infer<typeof selectedIds>;
 
 export type PaginationParams = PaginationState;

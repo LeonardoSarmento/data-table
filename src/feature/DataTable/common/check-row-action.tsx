@@ -11,7 +11,7 @@ import { useFilters } from '../hooks/useFilters';
 
 type CheckedAction<T, R> = {
   row: Row<T>;
-  id: number;
+  id: number | string;
   routeId: R;
 };
 export function CheckedRow<T, R extends RouteIds<RegisteredRouter['routeTree']>>({
@@ -35,7 +35,7 @@ export function CheckedRow<T, R extends RouteIds<RegisteredRouter['routeTree']>>
     // Update the filters with the new selected IDs
     setFilters({
       ...filters,
-      selectedIds: Array.from(selectedIdsSet),
+      selectedIds: selectedIdsSet.size === 0 ? undefined : Array.from(selectedIdsSet),
     });
 
     // Update the row selection state
