@@ -64,7 +64,7 @@ const data: SidebarMenuOptions = {
     },
     {
       title: 'LinkedIn',
-      url: 'https://linkedin.com/leonardo-araujo-sarmento',
+      url: 'https://linkedin.com/in/leonardo-araujo-sarmento',
       icon: Icons.linkedIn,
     },
     {
