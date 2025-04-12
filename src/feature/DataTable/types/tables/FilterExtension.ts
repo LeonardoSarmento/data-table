@@ -12,7 +12,7 @@ export type SelectionType = z.infer<typeof selectionSchema>;
 export const removingSchema = z.enum(['REMOVE', 'ACTIVATED', 'DEACTIVATED']);
 export type RemovingType = z.infer<typeof removingSchema>;
 
-export const selectedIds = z.number().array().optional();
+export const selectedIds = z.union([z.string(), z.number()]).array().optional();
 export type SelectedIdsType = z.infer<typeof selectedIds>;
 
 export type PaginationParams = PaginationState;
