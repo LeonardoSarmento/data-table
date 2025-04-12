@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 
 import Header from '@components/header';
 
@@ -25,11 +25,18 @@ export const Route = createFileRoute('/')({
 function UsersComponent() {
   const { userData } = Route.useLoaderData();
   const columns = useMemo(() => userColumns, []);
+  const { navigate } = useRouter();
 
   return (
     <>
       <Header title="Usuários" description="Listagem de todos os usuários da plataforma" />
-      <DataTable data={userData} columns={columns} toolbar={DataTableToolbarUsers} routeId={Route.id} />
+      <DataTable
+        data={userData}
+        columns={columns}
+        toolbar={DataTableToolbarUsers}
+        routeId={Route.id}
+        navigateOnDoubleClick={(id) => navigate({ to: '/', params: { userId: id.toString() } })}
+      />
     </>
   );
 }

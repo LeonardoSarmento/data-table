@@ -22,6 +22,12 @@ export function UserToolbarAction<TData>({ className, ...props }: DataTableToolb
         {
           dialogTitle: 'Deseja remover os registros de usuários?',
         },
+        // {
+        //   protected: 'true',
+        //   buttonType: 'toolbarActionSwitchState',
+        //   buttonText: 'Ativar/Desativar',
+        //   dialogTitle: 'Deseja ativar ou desativar múltiplos usuários?',
+        // },
         {
           label: 'Voltar',
           variant: 'outline',

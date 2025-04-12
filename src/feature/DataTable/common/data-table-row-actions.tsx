@@ -9,7 +9,7 @@ import { cn } from '@lib/utils';
 import { DataTableExportToCSV } from './data-table-export-to-csv';
 
 import { Button, buttonVariants } from '../components/ui/button';
-import { DialogComponent } from '../components/dialog';
+import { DialogComponent, DialogType } from '../components/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,18 +19,21 @@ import {
   DropdownMenuTrigger,
 } from '../components/ui/dropdown-menu';
 
-export interface Action {
+export interface Action<R> {
   label?: string;
   variant?: VariantProps<typeof buttonVariants>['variant'];
   onClick?: () => void;
   dialogTitle?: string;
-  protected?: boolean;
-  buttonType?: 'rowAction' | 'button';
+  buttonText?: string;
+  cardText?: string;
+  protected?: 'true' | 'false';
+  tooltipContent?: string;
+  buttonType?: DialogType<R>['buttonType'];
 }
 
 export interface ControlToolbarProps<TData, R extends RouteIds<RegisteredRouter['routeTree']>>
   extends React.HTMLAttributes<HTMLDivElement> {
-  actions: Action[];
+  actions: Action<R>[];
   menuLabel?: string;
   className?: string;
   table: Table<TData>;
@@ -55,9 +58,9 @@ export function ControlToolbar<TData, R extends RouteIds<RegisteredRouter['route
         {actions.map((action, index) => (
           <div key={index}>
             {action.dialogTitle ? (
-              <DialogComponent title={action.dialogTitle} />
+              <DialogComponent title={action.dialogTitle} mutate={action.onClick} routeId={routeId} {...action}  />
             ) : !action.protected ? (
-              <Button onClick={action.onClick} variant={action.variant} size="sm">
+              <Button onClick={action.onClick} variant={action.variant} size="sm" {...action}>
                 {action.label}
               </Button>
             ) : null}
@@ -81,11 +84,11 @@ export function ControlToolbar<TData, R extends RouteIds<RegisteredRouter['route
             <React.Fragment key={index}>
               {action.dialogTitle ? (
                 <DropdownMenuItem onClick={(e) => e.preventDefault()}>
-                  <DialogComponent className="flex-1" title={action.dialogTitle} mutate={action.onClick} />
+                  <DialogComponent className="flex-1" title={action.dialogTitle} mutate={action.onClick} routeId={routeId} {...action} />
                 </DropdownMenuItem>
               ) : !action.protected ? (
                 <DropdownMenuItem onClick={(e) => e.preventDefault()}>
-                  <Button onClick={action.onClick} variant={action.variant} className="flex-1" size="sm">
+                  <Button onClick={action.onClick} variant={action.variant} className="flex-1" size="sm" {...action}>
                     {action.label}
                   </Button>
                 </DropdownMenuItem>

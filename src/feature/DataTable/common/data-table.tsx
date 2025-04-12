@@ -25,14 +25,13 @@ import { DataTableToolbarProps } from '../types/tables/DataTableComponents';
 import { useFilters } from '../hooks/useFilters';
 
 import { sortByToState, stateToSortBy } from '../lib/tableSortMapper';
+import { cn } from '../lib/utils';
 
 export const DEFAULT_PAGE_INDEX = 0;
 export const DEFAULT_PAGE_SIZE = 10;
 
-type Props<
-  T extends Record<string, string | number | string[] | number[] | Date>,
-  R extends RouteIds<RegisteredRouter['routeTree']>,
-> = {
+type PropsOptionTypes = string | number | string[] | number[] | Date;
+type Props<T extends Record<string, PropsOptionTypes>, R extends RouteIds<RegisteredRouter['routeTree']>> = {
   data: PaginatedData<T>;
   columns: ColumnDef<T>[];
   toolbar?: ({ table }: DataTableToolbarProps<T>) => React.JSX.Element;
@@ -41,10 +40,11 @@ type Props<
   pagination?: boolean;
   pageselection?: boolean;
   rowcountselection?: boolean;
+  navigateOnDoubleClick?: (id: PropsOptionTypes) => void;
 };
 
 export default function DataTable<
-  T extends Record<string, string | number | string[] | number[] | Date>,
+  T extends Record<string, PropsOptionTypes>,
   R extends RouteIds<RegisteredRouter['routeTree']>,
 >({
   data,
@@ -55,6 +55,7 @@ export default function DataTable<
   pagination = true,
   pageselection = true,
   rowcountselection = true,
+  navigateOnDoubleClick,
 }: Props<T, R>) {
   const { filters, setFilters } = useFilters<R>(routeId);
   const { pageIndex, pageSize, sortBy } = filters as Filters<T>;
@@ -116,7 +117,16 @@ export default function DataTable<
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && 'selected'}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  if (navigateOnDoubleClick) navigateOnDoubleClick(row.original.id);
+                }}
+                className={cn(navigateOnDoubleClick ? 'cursor-pointer' : '')}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                 ))}
