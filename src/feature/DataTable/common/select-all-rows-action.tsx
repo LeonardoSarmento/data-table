@@ -8,7 +8,7 @@ import { useFilters } from '../hooks/useFilters';
 type SelectAllAction<T, R> = {
   table: Table<T>;
   routeId: R;
-  allIds: number[];
+  allIds: (number | string)[];
 };
 
 export function SelectAllCheckbox<T, R extends RouteIds<RegisteredRouter['routeTree']>>({
