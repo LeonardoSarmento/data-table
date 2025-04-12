@@ -32,6 +32,12 @@ export function UserButtonAction<TData>({ row }: DataTableRowActionsProps<TData>
         title={`Deseja remover o usuário ${user.name}?`}
         routeId={userTableRouteId}
       />
+      {/* <DialogComponent
+        buttonType="rowActionSwitchState"
+        tooltipContent="Ativar/Desativar"
+        title={`Deseja alterar o status do usuário ${user.name}?`}
+        routeId={userTableRouteId}
+      /> */}
     </div>
   );
 }

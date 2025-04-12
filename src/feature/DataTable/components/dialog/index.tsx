@@ -1,6 +1,6 @@
 import { DeleteIcon, Power } from 'lucide-react';
 
-import { Button } from '../ui/button';
+import { Button, buttonVariants } from '../ui/button';
 import {
   Dialog,
   DialogClose,
@@ -21,6 +21,7 @@ import { ButtonWithTooltip } from '../button/button-with-tooltip';
 import { Card } from '@components/ui/card';
 import { Large } from '@components/typography/large';
 import { Label } from '@components/ui/label';
+import { VariantProps } from 'class-variance-authority';
 
 export type DialogType<R> = {
   title: string;
@@ -33,6 +34,27 @@ export type DialogType<R> = {
   tooltipContent?: string;
   routeId: R;
 } & DialogProps;
+
+function getButtonProps<R>(
+  buttonType: DialogType<R>['buttonType'],
+  buttonText?: string,
+): { icon: React.ReactNode; label: string | null; variant: VariantProps<typeof buttonVariants>['variant'] } {
+  switch (buttonType) {
+    case 'rowActionRemove':
+      return { icon: <DeleteIcon />, label: null, variant: 'outline' };
+    case 'rowActionSwitchState':
+      return { icon: <Power />, label: null, variant: 'outline' };
+    default:
+      return { icon: null, label: buttonText ?? 'Deletar', variant: 'destructive' };
+  }
+}
+
+function getDialogDescription(cardText?: string, isSwitchStateType?: boolean) {
+  if (cardText) return cardText;
+  return isSwitchStateType
+    ? 'Altere o status dos registros selecionados para ativo ou desativado. Essa alteração pode ser desfeita posteriormente, caso necessário.'
+    : 'Após excluir os registros selecionados, não é possível recuperar esses registros.';
+}
 
 export function DialogComponent<R extends RouteIds<RegisteredRouter['routeTree']>, T>({
   title,
@@ -47,70 +69,39 @@ export function DialogComponent<R extends RouteIds<RegisteredRouter['routeTree']
 }: DialogType<R>) {
   const { filters, setFilters } = useFilters(routeId);
   const { remove } = filters as Filters<T>;
+
   const isSwitchStateType = buttonType === 'rowActionSwitchState' || buttonType === 'toolbarActionSwitchState';
+  const isActivatedState = remove === removingSchema.enum.ACTIVATED;
+  const isDeactivatedState = remove === removingSchema.enum.DEACTIVATED;
+  const isTogglingState = isActivatedState || isDeactivatedState;
+
+  const { icon, label, variant } = getButtonProps(buttonType, buttonText);
+
+  const handleOpenChange = (open: boolean) => {
+    setFilters({
+      ...filters,
+      remove: open ? (isSwitchStateType ? removingSchema.enum.DEACTIVATED : removingSchema.enum.REMOVE) : undefined,
+    });
+  };
+
   return (
     <Dialog
       {...props}
-      defaultOpen={
-        remove === removingSchema.enum.REMOVE ||
-        remove === removingSchema.enum.ACTIVATED ||
-        remove === removingSchema.enum.DEACTIVATED
-      }
-      onOpenChange={(open) =>
-        setFilters({
-          ...filters,
-          remove: open ? (isSwitchStateType ? removingSchema.enum.DEACTIVATED : removingSchema.enum.REMOVE) : undefined,
-        })
-      }
+      defaultOpen={remove === removingSchema.enum.REMOVE || isTogglingState}
+      onOpenChange={handleOpenChange}
     >
       <DialogTrigger asChild>
-        {buttonType === 'rowActionRemove' ? (
-          <ButtonWithTooltip
-            variant={buttonType === 'rowActionRemove' ? 'outline' : 'destructive'}
-            className={cn('border-brand', className)}
-            size="sm"
-            tooltipContent={tooltipContent ? tooltipContent : undefined}
-          >
-            {buttonType === 'rowActionRemove' ? <DeleteIcon /> : buttonText ? buttonText : 'Deletar'}
-          </ButtonWithTooltip>
-        ) : buttonType === 'rowActionSwitchState' ? (
-          <ButtonWithTooltip
-            variant={buttonType === 'rowActionSwitchState' ? 'outline' : 'destructive'}
-            className={cn('border-brand', className)}
-            size="sm"
-            tooltipContent={tooltipContent ? tooltipContent : undefined}
-          >
-            {buttonType === 'rowActionSwitchState' ? <Power /> : buttonText ? buttonText : 'Deletar'}
-          </ButtonWithTooltip>
-        ) : buttonType === 'toolbarActionSwitchState' ? (
-          <ButtonWithTooltip
-            variant="destructive"
-            className={cn('border-brand', className)}
-            size="sm"
-            tooltipContent={tooltipContent ? tooltipContent : undefined}
-          >
-            {buttonText ? buttonText : 'Deletar'}
-          </ButtonWithTooltip>
-        ) : buttonType === 'toolbarRemove' ? (
-          <ButtonWithTooltip
-            variant="destructive"
-            className={cn('border-brand', className)}
-            size="sm"
-            tooltipContent={tooltipContent ? tooltipContent : undefined}
-          >
-            {buttonText ? buttonText : 'Deletar'}
-          </ButtonWithTooltip>
-        ) : (
-          <ButtonWithTooltip
-            variant="destructive"
-            className={cn('border-brand', className)}
-            size="sm"
-            tooltipContent={tooltipContent ? tooltipContent : undefined}
-          >
-            {buttonText ? buttonText : 'Deletar'}
-          </ButtonWithTooltip>
-        )}
+        <ButtonWithTooltip
+          variant={variant}
+          className={cn('border-brand', className)}
+          size="sm"
+          tooltipContent={tooltipContent}
+        >
+          {icon}
+          {label}
+        </ButtonWithTooltip>
       </DialogTrigger>
+
       <DialogContent
         className="max-w-[320px] rounded-lg sm:max-w-[400px] md:max-w-[500px]"
         onDoubleClick={(e) => {
@@ -121,15 +112,10 @@ export function DialogComponent<R extends RouteIds<RegisteredRouter['routeTree']
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <DialogDescription>
-          {cardText
-            ? cardText
-            : isSwitchStateType
-              ? 'Altere o status dos registros selecionados para ativo ou desativado. Essa alteração pode ser desfeita posteriormente, caso necessário.'
-              : 'Após excluir os registros selecionados, não é possível recuperar esses registros.'}
-        </DialogDescription>
-        {(remove === removingSchema.enum.ACTIVATED || remove === removingSchema.enum.DEACTIVATED) &&
-        isSwitchStateType ? (
+
+        <DialogDescription>{getDialogDescription(cardText, isSwitchStateType)}</DialogDescription>
+
+        {isSwitchStateType && isTogglingState && (
           <Card className="flex flex-col flex-wrap items-center gap-3 py-3">
             <Large>Alterar o status para:</Large>
             <div className="flex items-center space-x-2">
@@ -148,7 +134,8 @@ export function DialogComponent<R extends RouteIds<RegisteredRouter['routeTree']
               <Label htmlFor="status-switch">Ativado</Label>
             </div>
           </Card>
-        ) : null}
+        )}
+
         <DialogFooter className="gap-3">
           <DialogClose asChild>
             <Button type="button" variant="outline">
